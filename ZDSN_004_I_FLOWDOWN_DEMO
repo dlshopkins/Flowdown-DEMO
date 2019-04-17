@@ -1,0 +1,42 @@
+@AbapCatalog.sqlViewName: 'ZDSN004_MASTERA'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Dassian Flow Down Master'
+//This view is the master just before the consumption
+define view ZDSN_004_I_FLOWDOWN_DEMO
+  as select from zdsn_004_i_sdmapall as FLOWDOWN
+  //I_SalesDocumentBasic pulls basic header data
+  //I_SalesDocumentItemBasic pulls basic item data
+  association [0..1] to I_SalesDocumentBasic as _salesdocument on  FLOWDOWN.vbeln = _salesdocument.SalesDocument
+  association [1..1] to ZDSN_004_I_FDGRPS    as _groups        on  FLOWDOWN.fdgroup = _groups.fdgroup
+  association [0..1] to ZDSN_004_I_FDOBJECTS as _objects       on  FLOWDOWN.fdobjnr = _objects.fdobjnr
+  association [0..1] to ZDSN_004_I_POVEND    as _po            on  FLOWDOWN.vbeln = _po.vbeln
+                                                               and FLOWDOWN.posnr = _po.posnr
+{
+  key  FLOWDOWN.vbeln,
+  key  FLOWDOWN.posnr,
+  key  FLOWDOWN.fdgroup,
+  key  FLOWDOWN.fdobjnr,
+       FLOWDOWN.fdobtyp,
+       FLOWDOWN.tabname,
+       FLOWDOWN.fname,
+       FLOWDOWN.multi,
+       FLOWDOWN.content,      
+       FLOWDOWN.fdtype,
+       FLOWDOWN.fdfix,
+       FLOWDOWN.txt_status,
+       FLOWDOWN.ernam,
+       FLOWDOWN.erdat,
+       FLOWDOWN.aenam,
+       FLOWDOWN.aedat,
+       FLOWDOWN.fdgroup_nm,
+       FLOWDOWN.fdobjnr_nm,
+       FLOWDOWN.FDSubObject,
+
+       //Expose associations
+       _salesdocument,
+       _groups,
+       _objects,
+       _po
+}
