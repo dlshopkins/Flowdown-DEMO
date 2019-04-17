@@ -1,0 +1,52 @@
+@AbapCatalog.sqlViewName: 'ZDSN004_DISPA'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+@Search.searchable: true
+@OData.publish: true
+//============================================
+define view ZDSN_004_C_DISPLAY_DEMO
+  as select distinct from ZDSN_004_I_FLOWDOWN_DEMO as DISPLAY
+{
+  key DISPLAY.vbeln                        as SALESDOC,
+  key DISPLAY.posnr                        as SALESITM,
+  key DISPLAY.fdgroup                      as FDGRP,
+  key DISPLAY.fdobjnr                      as FDOBJ,
+  key _po.recobj                           as PurchDoc, //Purchase order number
+  key _po.recitm                           as PurchItem,
+
+      _salesdocument.SDDocumentCategory    as SDDocCat, //SD Document Category
+      _salesdocument.SalesOrganization     as SDOrg,
+      _salesdocument.DistributionChannel   as SDDistChannel,
+      _salesdocument.OrganizationDivision  as SDDivision, //Division
+
+      _groups.fdgrname,
+      _objects.fdobname                    as FDFieldName,
+
+      _po.lifnr                            as Vendor,
+      _po.Name,
+
+      //       FD Sub-object
+      case multi
+        when 'Yes' then
+          DISPLAY.FDSubObject
+        else ''
+      end                                  as FDSubObject,
+
+      // Add Icon for object type  - this is temporary coding
+      DISPLAY.fdobtyp                      as ObjectType,
+      DISPLAY.multi,
+
+      //    Default (checkbox)  - this is temporary coding
+      case DISPLAY.multi
+      when 'No' then
+         'True'
+      else 'False'
+      end                                  as DispDef,
+
+      //    Content
+      DISPLAY.content
+      //      // Description
+      //      DISPLAY.description
+}
