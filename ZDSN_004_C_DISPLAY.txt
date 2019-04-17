@@ -1,0 +1,61 @@
+//See ZDSN_004_C_DISPLAY_DEMO for working demo
+@AbapCatalog.sqlViewName: 'ZDSN004_DISP'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@ClientDependent: false
+@Metadata.allowExtensions: true
+@Search.searchable: true
+@OData.publish: true
+//============================================
+define view ZDSN_004_C_DISPLAY
+with parameters
+    in_salesdoc : vbeln_va
+  as select distinct from ZDSN_004_I_FLOWDOWN(in_salesdoc:$parameters.in_salesdoc) as DISPLAY
+{
+//  key DISPLAY.vbeln                        as SALESDOC,
+//  key DISPLAY.posnr                        as SALESITM,
+////  key DISPLAY.fdgroup                      as FDGRP,
+////  key DISPLAY.fdobjnr                      as FDOBJ,
+//  key _po.recobj                           as PurchDoc, //Purchase order number
+//  key _po.recitm                           as PurchItem,
+//
+//
+//            _salesdocument.SDDocumentCategory    as SDDocCat, //SD Document Category
+//            _salesdocument.SalesOrganization     as SDOrg,
+//            _salesdocument.DistributionChannel   as SDDistChannel,
+//            _salesdocument.OrganizationDivision  as SDDivision, //Division
+//
+//      //      _groups.fdgrname as FDGroupNumber,
+//      //      _groups.fdobname                    as FDObjectNumber, //FDFieldName,
+//
+//            _po.lifnr                            as Vendor,
+//            _po.Name,
+//      
+//      
+//            //       FD Sub-object
+//            case multi
+//              when 'Yes' then
+//                DISPLAY.FDSubObject
+//              else ''
+//            end                                  as FDSubObject,
+//      
+//      
+//            // Add Icon for object type  - this is temporary coding
+//            DISPLAY.fdobtyp                      as ObjectType,
+//            DISPLAY.multi,
+//      
+//            //    Default (checkbox)  - this is temporary coding
+//            case DISPLAY.multi
+//            when 'No' then
+//               'True'
+//            else 'False'
+//            end                                  as DispDef,
+//
+//      //    Content
+      DISPLAY.content
+//
+//      //      DISPLAY.content_ext
+//      //      // Description
+//      //      DISPLAY.description
+}
